@@ -2,4 +2,4 @@ from django.apps import AppConfig
 
 
 class RestApiGatewayConfig(AppConfig):
-    name = 'rest_api_gateway'
+    name = "rest_api_gateway"
