@@ -9,28 +9,49 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Account',
+            name="Account",
             fields=[
-                ('name', models.CharField(max_length=100, primary_key=True, serialize=False)),
-                ('api_key', models.CharField(max_length=24, unique=True)),
-                ('api_secret', models.CharField(max_length=48, unique=True)),
+                (
+                    "name",
+                    models.CharField(max_length=100, primary_key=True, serialize=False),
+                ),
+                ("api_key", models.CharField(max_length=24, unique=True)),
+                ("api_secret", models.CharField(max_length=48, unique=True)),
             ],
         ),
         migrations.CreateModel(
-            name='Order',
+            name="Order",
             fields=[
-                ('order_id', models.UUIDField(default=uuid.uuid1, editable=False, primary_key=True, serialize=False)),
-                ('symbol', models.CharField(max_length=6)),
-                ('volume', models.IntegerField()),
-                ('timestamp', models.DateTimeField(auto_now_add=True)),
-                ('side', models.CharField(choices=[('Buy', 'Buy'), ('Sell', 'Sell')], max_length=4)),
-                ('price', models.DecimalField(decimal_places=2, max_digits=8)),
-                ('account', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='rest_api_gateway.Account')),
+                (
+                    "order_id",
+                    models.UUIDField(
+                        default=uuid.uuid1,
+                        editable=False,
+                        primary_key=True,
+                        serialize=False,
+                    ),
+                ),
+                ("symbol", models.CharField(max_length=6)),
+                ("volume", models.IntegerField()),
+                ("timestamp", models.DateTimeField(auto_now_add=True)),
+                (
+                    "side",
+                    models.CharField(
+                        choices=[("Buy", "Buy"), ("Sell", "Sell")], max_length=4
+                    ),
+                ),
+                ("price", models.DecimalField(decimal_places=2, max_digits=8)),
+                (
+                    "account",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="rest_api_gateway.Account",
+                    ),
+                ),
             ],
         ),
     ]

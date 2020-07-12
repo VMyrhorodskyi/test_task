@@ -40,6 +40,9 @@ INSTALLED_APPS = [
     "rest_framework",
     "rest_api_gateway.apps.RestApiGatewayConfig",
     "django_filters",
+    "bitmex",
+    "injector",
+    "django_injector",
 ]
 
 MIDDLEWARE = [
@@ -50,7 +53,10 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "django_injector.middleware.inject_request_middleware",
 ]
+
+INJECTOR_MODULES = ["rest_api_gateway.injections.MetaModule"]
 
 ROOT_URLCONF = "bitmex_gateway.urls"
 
@@ -119,3 +125,7 @@ STATIC_URL = "/static/"
 REST_FRAMEWORK = {
     "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"]
 }
+
+BITMEX_API_KEY = "48GphC_MTWN_0ntW4V1osU4S"
+BITMEX_API_SECRET = "-hoVHM9kC1JRwlQBPjYdzosCCpKl7CNtomzyCTGVoLcQ5PSV"
+BITMEX_API_ORDERS_DEFAULT_TYPE = "Market"
