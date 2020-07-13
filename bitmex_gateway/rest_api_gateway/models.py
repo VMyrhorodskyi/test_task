@@ -15,6 +15,7 @@ class Account(models.Model):
 
 class Order(models.Model):
     order_id = models.UUIDField(primary_key=True, default=uuid.uuid1, editable=False)
+    bitmex_id = models.UUIDField(default=uuid.uuid1, editable=False)
     symbol = models.CharField(max_length=6)
     volume = models.IntegerField()
     timestamp = models.DateTimeField(auto_now_add=True)

@@ -10,10 +10,14 @@ class AccountSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class OrderSerializer(serializers.HyperlinkedModelSerializer):
+    bitmex_id = serializers.UUIDField()
+
     class Meta:
         model = Order
         fields = (
             "url",
+            "order_id",
+            "bitmex_id",
             "symbol",
             "volume",
             "timestamp",
