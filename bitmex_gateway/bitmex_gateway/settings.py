@@ -78,7 +78,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "bitmex_gateway.wsgi.application"
 
-
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
@@ -125,7 +124,7 @@ STATIC_URL = "/static/"
 REST_FRAMEWORK = {
     "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"]
 }
+BITMEX_API_KEY = "AzQ_jcFDxqV3T9BsjHZ8w0C6"
+BITMEX_API_SECRET = "6xHGlMV24rFhBYvTjFnvEtkqVlhJceoHQ8D0Fru1lBFaIpT4"
 
-BITMEX_API_KEY = "48GphC_MTWN_0ntW4V1osU4S"
-BITMEX_API_SECRET = "-hoVHM9kC1JRwlQBPjYdzosCCpKl7CNtomzyCTGVoLcQ5PSV"
-BITMEX_API_ORDERS_DEFAULT_TYPE = "Market"
+BITMEX_API_ORDER_TYPE = "Market"

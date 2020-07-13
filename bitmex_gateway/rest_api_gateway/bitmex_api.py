@@ -11,7 +11,7 @@ class BitmexOrders:
 
     def post(self, data):
         return self.bitmex_client.Order.Order_new(
-            ordType=settings.BITMEX_API_ORDERS_DEFAULT_TYPE,
+            ordType=settings.BITMEX_API_ORDER_TYPE,
             symbol=data["symbol"],
             orderQty=data["volume"],
             side=data["side"],
