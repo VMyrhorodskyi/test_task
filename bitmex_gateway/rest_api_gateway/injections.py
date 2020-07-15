@@ -8,7 +8,7 @@ from .typings import BitmexClient
 
 class BitmexModule(injector.Module):
     @injector.provider
-    @injector.threadlocal
+    @injector.singleton
     def provide_bitmex_client(self) -> BitmexClient:
         return bitmex(
             test=True,
@@ -18,7 +18,7 @@ class BitmexModule(injector.Module):
 
     def configure(self, binder: injector.Binder) -> None:
         binder.bind(
-            BitmexOrders, to=BitmexOrders, scope=injector.ThreadLocalScope,
+            BitmexOrders, to=BitmexOrders, scope=injector.SingletonScope,
         )
 
 
