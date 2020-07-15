@@ -43,6 +43,9 @@ INSTALLED_APPS = [
     "bitmex",
     "injector",
     "django_injector",
+    "websocket_api_gateway.apps.WebsocketApiGatewayConfig",
+    "channels",
+    "bitmex_websocket",
 ]
 
 MIDDLEWARE = [
@@ -56,7 +59,9 @@ MIDDLEWARE = [
     "django_injector.middleware.inject_request_middleware",
 ]
 
-INJECTOR_MODULES = ["rest_api_gateway.injections.MetaModule"]
+INJECTOR_MODULES = [
+    "rest_api_gateway.injections.MetaModule",
+]
 
 ROOT_URLCONF = "bitmex_gateway.urls"
 
@@ -78,6 +83,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "bitmex_gateway.wsgi.application"
 
+ASGI_APPLICATION = "bitmex_gateway.routing.application"
+
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
@@ -96,9 +103,9 @@ AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
     },
-    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",},
-    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",},
-    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",},
+    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
+    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
+    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 
 
@@ -124,6 +131,7 @@ STATIC_URL = "/static/"
 REST_FRAMEWORK = {
     "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"]
 }
+
 BITMEX_API_KEY = "AzQ_jcFDxqV3T9BsjHZ8w0C6"
 BITMEX_API_SECRET = "6xHGlMV24rFhBYvTjFnvEtkqVlhJceoHQ8D0Fru1lBFaIpT4"
 
