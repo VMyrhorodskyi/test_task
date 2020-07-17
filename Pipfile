@@ -13,7 +13,6 @@ bitmex = "*"
 injector = "*"
 django-injector = "*"
 channels = "*"
-bitmex-websocket = "*"
 
 [requires]
 python_version = "3.7"

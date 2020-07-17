@@ -45,7 +45,6 @@ INSTALLED_APPS = [
     "django_injector",
     "websocket_api_gateway.apps.WebsocketApiGatewayConfig",
     "channels",
-    "bitmex_websocket",
 ]
 
 MIDDLEWARE = [
@@ -136,3 +135,6 @@ BITMEX_API_KEY = "AzQ_jcFDxqV3T9BsjHZ8w0C6"
 BITMEX_API_SECRET = "6xHGlMV24rFhBYvTjFnvEtkqVlhJceoHQ8D0Fru1lBFaIpT4"
 
 BITMEX_API_ORDER_TYPE = "Market"
+
+BITMEX_WS_URL = "wss://testnet.bitmex.com/realtime"
+BITMEX_WS_SUBSCRIPTION = "instrument"
