@@ -1,58 +1,49 @@
+import asyncio
 import json
-from channels.generic.websocket import WebsocketConsumer
-from django.conf import settings
-from threading import Thread
-from websocket import WebSocketApp
+from channels.generic.websocket import AsyncWebsocketConsumer
+from django_injector import inject
+
+from .bitmex_ws import BitmexWSConnection, BitmexWSConnectionPool
 
 
-class QuotesConsumer(WebsocketConsumer):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.bitmex_ws = WebSocketApp(
-            settings.BITMEX_WS_URL, on_message=self.on_bitmex_message
-        )
+class Consumer(AsyncWebsocketConsumer):
+    @inject
+    def __init__(
+        self, bitmex_ws_connection_pool: BitmexWSConnectionPool, *args, **kwargs
+    ):
+        super().__init__(self, *args, **kwargs)
 
-        self.bitmex_ws_thread = Thread(target=lambda: self.bitmex_ws.run_forever())
-        self.bitmex_ws_thread.daemon = True
-        self.bitmex_ws_thread.start()
+        self.bitmex_ws_connection_pool = bitmex_ws_connection_pool
 
-    def on_bitmex_message(self, message):
-        message = json.loads(message)
-        if self.check_bitmex_message(message=message):
-            self.send(json.dumps(self.parse_bitmex_message(message)))
-
-    def check_bitmex_message(self, message):
-        return (
-            message.get("action") == "update"
-            and "data" in message
-            and "lastPrice" in message["data"][0]
-        )
-
-    def parse_bitmex_message(self, message):
-        message_data = message["data"][0]
-        return {
-            "account": self.account_name,
-            "symbol": message_data["symbol"],
-            "price": message_data["lastPrice"],
-            "timestamp": message_data["timestamp"],
-        }
-
-    def receive(self, text_data=None, bytes_data=None):
+    async def receive(self, text_data=None, bytes_data=None):
         text_data_json = json.loads(text_data)
 
         if text_data_json.get("action") == "subscribe" and text_data_json.get(
             "account"
         ):
-            self.account_name = text_data_json["account"]
-            self.bitmex_ws.send(
-                json.dumps({"op": "subscribe", "args": settings.BITMEX_WS_SUBSCRIPTION})
+            await self.channel_layer.group_add(
+                text_data_json["account"], self.channel_name
             )
+
+            if not self.bitmex_ws_connection_pool.get(text_data_json["account"]):
+                connection = BitmexWSConnection(account_name=text_data_json["account"])
+                self.bitmex_ws_connection_pool.update(
+                    account_name=text_data_json["account"], connection=connection
+                )
+
+                asyncio.get_event_loop().create_task(connection.subscribe_bitmex())
         if text_data_json.get("action") == "unsubscribe" and text_data_json.get(
             "account"
         ):
-            self.account_name = None
-            self.bitmex_ws.send(
-                json.dumps(
-                    {"op": "unsubscribe", "args": settings.BITMEX_WS_SUBSCRIPTION}
-                )
+            await self.channel_layer.group_discard(
+                text_data_json["account"], self.channel_name
             )
+
+        if not text_data_json.get("action") and text_data_json.get("account"):
+            await self.channel_layer.group_send(
+                text_data_json["account"],
+                {"type": "group_message", "message": text_data},
+            )
+
+    async def group_message(self, event):
+        await self.send(text_data=event["message"])

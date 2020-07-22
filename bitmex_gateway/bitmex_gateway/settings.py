@@ -45,6 +45,8 @@ INSTALLED_APPS = [
     "django_injector",
     "websocket_api_gateway.apps.WebsocketApiGatewayConfig",
     "channels",
+    "channels_redis",
+    "websockets",
 ]
 
 MIDDLEWARE = [
@@ -60,6 +62,7 @@ MIDDLEWARE = [
 
 INJECTOR_MODULES = [
     "rest_api_gateway.injections.MetaModule",
+    "websocket_api_gateway.injections.WSMetaModule",
 ]
 
 ROOT_URLCONF = "bitmex_gateway.urls"
@@ -83,6 +86,13 @@ TEMPLATES = [
 WSGI_APPLICATION = "bitmex_gateway.wsgi.application"
 
 ASGI_APPLICATION = "bitmex_gateway.routing.application"
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {"hosts": [("127.0.0.1", 6379)],},
+    },
+}
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
@@ -131,10 +141,11 @@ REST_FRAMEWORK = {
     "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"]
 }
 
-BITMEX_API_KEY = "AzQ_jcFDxqV3T9BsjHZ8w0C6"
-BITMEX_API_SECRET = "6xHGlMV24rFhBYvTjFnvEtkqVlhJceoHQ8D0Fru1lBFaIpT4"
+DEFAULT_ACCOUNT_API_KEY = "AzQ_jcFDxqV3T9BsjHZ8w0C6"
+DEFAULT_ACCOUNT_API_SECRET = "6xHGlMV24rFhBYvTjFnvEtkqVlhJceoHQ8D0Fru1lBFaIpT4"
 
-BITMEX_API_ORDER_TYPE = "Market"
+BITMEX_API_DEFAULT_ORDER_TYPE = "Market"
 
 BITMEX_WS_URL = "wss://testnet.bitmex.com/realtime"
-BITMEX_WS_SUBSCRIPTION = "instrument"
+
+WS_URL = "ws://localhost:8000/ws/"

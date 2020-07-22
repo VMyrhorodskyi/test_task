@@ -12,8 +12,8 @@ class BitmexModule(injector.Module):
     def provide_bitmex_client(self) -> BitmexClient:
         return bitmex(
             test=True,
-            api_key=settings.BITMEX_API_KEY,
-            api_secret=settings.BITMEX_API_SECRET,
+            api_key=settings.DEFAULT_ACCOUNT_API_KEY,
+            api_secret=settings.DEFAULT_ACCOUNT_API_SECRET,
         )
 
     def configure(self, binder: injector.Binder) -> None:
